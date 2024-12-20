@@ -1,38 +1,36 @@
-import { Head } from "@inertiajs/react";
+import { useEffect, useState } from 'react';
 
 const Test = () => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        console.log('connecting to ws');
+
+        Echo.channel('test-channel-123').listen('TestWebsocketEvent', (e) => {
+            console.log(e.data);
+            console.log(typeof(e.data));
+            setData(e.data);
+        });
+
+        return () => {
+            console.log('disconnecting from ws');
+        };
+
+
+    }, [Echo]);
     return (
         <>
-            <Head title="Test" />
-            <div>Test</div>
-            <div>
-                <div class="avatar">
-                    <div class="size-16 mask mask-decagon">
-                        <img
-                            src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-                            alt="avatar"
-                        />
-                    </div>
-                </div>
-                <div class="avatar">
-                    <div class="size-16 mask mask-hexagon-2">
-                        <img
-                            src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-                            alt="avatar"
-                        />
-                    </div>
-                </div>
-                <div class="avatar">
-                    <div class="size-16 mask mask-heart">
-                        <img
-                            src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-                            alt="avatar"
-                        />
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-};
+        <div>This is test </div>
+        <div className="flex-col h-16 flex">
+    <div className="h-16 w-full rounded-md animate-pulse bg-neutral-300 dark:bg-neutral-700"></div>
+    <div className="flex-row h-16 flex">
+        <div className="h-3.5 w-full rounded-md mt-3.5 animate-pulse bg-neutral-300 dark:bg-neutral-700">
+            <h3>Data 1 : {data.data ? data.data : 'No Data'}</h3>
+        </div>
+    </div>
+</div>
+
+        </>);
+}
 
 export default Test;
